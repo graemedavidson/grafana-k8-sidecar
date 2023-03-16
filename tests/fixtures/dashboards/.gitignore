@@ -1,0 +1,9 @@
+# ignore everything else
+*
+
+!.gitignore
+
+# fixture files
+!test-1.json
+!dir1/test-2.json
+!dir1/test-3.json

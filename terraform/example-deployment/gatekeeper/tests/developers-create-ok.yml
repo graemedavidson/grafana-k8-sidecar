@@ -1,0 +1,12 @@
+---
+apiVersion: example.co.uk/v1
+kind: GrafanaDashboard
+metadata:
+  name: gatekeeper-ok-1
+  namespace: developers
+annotations:
+  test-description: 'pass: matching dir and namespace'
+spec:
+  name: gatekeeper-ok-1
+  dir: developers
+  json: '{}'
