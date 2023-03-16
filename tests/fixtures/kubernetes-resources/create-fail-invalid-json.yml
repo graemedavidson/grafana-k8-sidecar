@@ -1,0 +1,11 @@
+---
+apiVersion: example.co.uk/v1
+kind: GrafanaDashboard
+metadata:
+  name: test-invalid-json
+annotations:
+  test-description: 'create failure: invalid json'
+spec:
+  name: invalid-kson
+  dir: dir2
+  json: '{ invalid json'

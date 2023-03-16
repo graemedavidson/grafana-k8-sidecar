@@ -1,0 +1,12 @@
+---
+apiVersion: grafana.five.ai/v1
+kind: GrafanaDashboard
+metadata:
+  name: gatekeeper-fail-1
+  namespace: infra
+annotations:
+  test-description: 'fail: dir does not match namespace or excepted dirs'
+spec:
+  name: gatekeeper-fail-1
+  dir: invalid
+  json: '{}'

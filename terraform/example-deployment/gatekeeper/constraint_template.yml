@@ -1,0 +1,36 @@
+---
+crd:
+  spec:
+    names:
+      kind: GrafanaSidecarAllowedDirs
+    validation:
+      openAPIV3Schema:
+        properties:
+          dirs:
+            type: array
+            items: string
+targets:
+- target: admission.k8s.gatekeeper.sh
+  rego: |
+    package grafanasidecaralloweddirs
+
+    excepted_dirs = dirs {
+      not input.parameters.dirs
+      dirs := [lower(input.review.object.metadata.namespace)]
+    }
+
+    excepted_dirs = dirs {
+      _dirs := array.concat(input.parameters.dirs, [input.review.object.metadata.namespace])
+      dirs := {lower(x) | x = _dirs[_]}
+    }
+
+    violation[{"msg": msg}] {
+      namespace := lower(input.review.object.metadata.namespace)
+      dir := lower(input.review.object.spec.dir)
+
+      satisfied := [good | check_dir = excepted_dirs[_] ; good = check_dir == dir]
+
+      not any(satisfied)
+
+      msg := sprintf("Dashboard dir: '%s' must be one of: %v", [dir, excepted_dirs])
+    }

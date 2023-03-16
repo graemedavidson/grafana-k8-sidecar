@@ -1,0 +1,46 @@
+---
+# Example taken from: https://github.com/vegasbrianc/prometheus
+version: '3.7'
+
+volumes:
+  grafana_data_sidecar: {}
+  prometheus_data_sidecar: {}
+
+services:
+
+  grafana:
+    image: grafana/grafana:8.3.6
+    ports:
+    - 3000:3000
+    volumes:
+    - grafana_data_sidecar:/var/lib/grafana
+    - ./config/grafana/provisioning:/etc/grafana/provisioning/
+    - ../sidecar/tests/fixtures/dashboards:/grafana/dashboards/fixtures
+    - ./config/grafana/provisioning/dashboards/files:/grafana/dashboards/monitoring
+    environment:
+    - GF_SECURITY_ADMIN_PASSWORD=test
+    - GF_USERS_ALLOW_SIGN_UP=false
+
+  prometheus:
+    image: prom/prometheus:v2.33.4
+    volumes:
+    - ./config/prometheus/:/etc/prometheus/
+    - prometheus_data_sidecar:/prometheus
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+    - --storage.tsdb.path=/prometheus
+    - --web.console.libraries=/usr/share/prometheus/console_libraries
+    - --web.console.templates=/usr/share/prometheus/consoles
+    ports:
+    - 9000:9000
+    - 9090:9090
+
+  alertmanager:
+    image: prom/alertmanager:v0.23.0
+    ports:
+    - 9093:9093
+    volumes:
+    - ./config/alertmanager/:/etc/alertmanager/
+    command:
+    - --config.file=/etc/alertmanager/config.yml
+    - --storage.path=/alertmanager

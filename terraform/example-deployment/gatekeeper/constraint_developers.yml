@@ -1,0 +1,20 @@
+---
+apiVersion: constraints.gatekeeper.sh/v1beta1
+kind: GrafanaSidecarAllowedDirs
+metadata:
+  name: grafanasidecaralloweddirs-infra
+spec:
+  match:
+    kinds:
+    - apiGroups: [grafana.example.co.uk]
+      kinds: [GrafanaDashboard]
+    namespaceSelector:
+      matchExpressions:
+      - key: example.co.uk/team
+        operator: In
+        values: [developers]
+  parameters:
+    dirs:
+    - developers
+    - tests
+    - scratch

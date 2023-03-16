@@ -1,0 +1,19 @@
+---
+apiVersion: 1
+
+providers:
+- name: sidecar
+  orgId: 1
+  disableDeletion: false
+  editable: true
+  updateIntervalSeconds: 10
+  options:
+    path: /grafana/dashboards/fixtures
+    foldersFromFilesStructure: true
+- name: docker-compose
+  orgId: 1
+  disableDeletion: false
+  editable: true
+  options:
+    path: /grafana/dashboards/monitoring
+    foldersFromFilesStructure: true

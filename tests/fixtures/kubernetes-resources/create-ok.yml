@@ -1,0 +1,15 @@
+---
+apiVersion: example.co.uk/v1
+kind: GrafanaDashboard
+metadata:
+  name: test-create-ok
+annotations:
+  test-description: 'create ok: base for other tests'
+spec:
+  name: test-create
+  dir: dir2
+  json: '{ "annotations": { "list": [ { "builtIn": 1, "datasource": "-- Grafana --", "enable": true, "hide": true, "iconColor":
+    "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard" } ] }, "editable": true, "gnetId": null, "graphTooltip":
+    0, "id": 2, "links": [], "panels": [], "schemaVersion": 27, "style": "dark", "tags": [], "templating": { "list": [] },
+    "time": { "from": "now-6h", "to": "now" }, "timepicker": {}, "timezone": "", "title": "test-create-ok", "uid": "1", "version":
+    1 }'

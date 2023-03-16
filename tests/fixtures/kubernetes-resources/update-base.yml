@@ -1,0 +1,30 @@
+---
+apiVersion: example.co.uk/v1
+kind: GrafanaDashboard
+metadata:
+  name: test-update
+annotations:
+  test-description: 'update ok: base 1 for other tests'
+spec:
+  name: base
+  dir: dir2
+  json: '{ "annotations": { "list": [ { "builtIn": 1, "datasource": "-- Grafana --", "enable": true, "hide": true, "iconColor":
+    "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard" } ] }, "editable": true, "gnetId": null, "graphTooltip":
+    0, "id": 2, "links": [], "panels": [], "schemaVersion": 27, "style": "dark", "tags": [], "templating": { "list": [] },
+    "time": { "from": "now-6h", "to": "now" }, "timepicker": {}, "timezone": "", "title": "test-update", "uid": "4", "version":
+    1 }'
+---
+apiVersion: example.co.uk/v1
+kind: GrafanaDashboard
+metadata:
+  name: test-update-2
+annotations:
+  test-description: 'update ok: base 2 for other tests'
+spec:
+  name: base2
+  dir: dir3
+  json: '{ "annotations": { "list": [ { "builtIn": 1, "datasource": "-- Grafana --", "enable": true, "hide": true, "iconColor":
+    "rgba(0, 211, 255, 1)", "name": "Annotations & Alerts", "type": "dashboard" } ] }, "editable": true, "gnetId": null, "graphTooltip":
+    0, "id": 2, "links": [], "panels": [], "schemaVersion": 27, "style": "dark", "tags": [], "templating": { "list": [] },
+    "time": { "from": "now-6h", "to": "now" }, "timepicker": {}, "timezone": "", "title": "test-update-2", "uid": "5", "version":
+    1 }'

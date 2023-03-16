@@ -1,0 +1,11 @@
+---
+apiVersion: example.co.uk/v1
+kind: GrafanaDashboard
+metadata:
+  name: test-update
+annotations:
+  test-description: 'update failure: invalid_json'
+spec:
+  name: base
+  dir: dir2
+  json: invalid json

@@ -1,0 +1,13 @@
+---
+groups:
+- name: Terraform-State-Checks
+  rules:
+  - alert: Terraform-State-has-Changes
+    annotations:
+      message: '{{$labels.repo}}/{{$labels.path}} has terraform state changes (master drift)'
+      dashboard_url: http://localhost:3000/d/0eaEzKoGz/terraform-state-checks?orgId=1&from=now-7d&to=now&refresh=1m
+    expr: |
+      tf_ci_terraform_check_state == 1
+    for: 1m
+    labels:
+      severity: warning

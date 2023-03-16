@@ -1,0 +1,80 @@
+---
+group: grafana.example.co.uk
+versions:
+- name: v1
+  served: true
+  storage: true
+  schema:
+    openAPIV3Schema:
+      type: object
+      description: Grafana Dashboard Schema
+      properties:
+        apiVersion:
+          type: string
+        kind:
+          type: string
+        metadata:
+          type: object
+        labels:
+          type: object
+        annotations:
+          type: object
+        spec:
+          type: object
+          properties:
+            dir:
+              type: string
+              pattern: ^([\w\_\-\s])*$
+            json:
+              type: string
+            name:
+              type: string
+              pattern: ^([\w\_\-\s])*$
+          required:
+          - dir
+          - name
+          - json
+        status:
+          properties:
+            reason:
+              description: Reason contains human readable information on why the dashboard is in current state
+              type: string
+            state:
+              description: State contains the current 'state' of the dashboard
+              enum:
+              - ok
+              - error
+              - warning
+              type: string
+            lastUpdateTime:
+              description: LastUpdateTime is the timestamp corresponding to the last status change of state.
+              format: date
+              type: string
+          type: object
+  additionalPrinterColumns:
+  - name: Reason
+    type: string
+    jsonPath: .status.reason
+  - name: State
+    type: string
+    jsonPath: .status.state
+  - name: Updated
+    type: date
+    jsonPath: .status.lastUpdateTime
+  - name: Age
+    type: date
+    jsonPath: .metadata.creationTimestamp
+  - name: Directory
+    type: string
+    jsonPath: .spec.dir
+  - name: Filename
+    type: string
+    jsonPath: .spec.name
+  - name: uid
+    type: string
+    jsonPath: .metadata.uid
+scope: Namespaced
+names:
+  kind: GrafanaDashboard
+  plural: grafanadashboards
+  singular: grafanadashboard
