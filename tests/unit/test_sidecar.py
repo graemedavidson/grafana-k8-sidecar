@@ -36,7 +36,7 @@ def open_json_fixture(fixture_file):
 
 
 @pytest.fixture()
-def fixture_dir(tmp_path):
+def fixtures_dir(tmp_path):
     """Copy fixture files into a tempdir for tests"""
     fixture_path = Path(BASE_DIR, "tests/fixtures/dashboards")
     tmp_dir = Path(tmp_path, "dashboards")
@@ -743,8 +743,8 @@ def test_update_error_pass_with_create(
             {"reason": "INVALID_JSON", "state": "error"},
             # expected results
             "dir2/invalid-json.json",
-            "INFO",
-            "did not attempt to delete dashboard",
+            "ERROR",
+            "unexpected error occurred during delete",
         ),
         # invalid json error, file exists, error from update
         (
@@ -761,8 +761,8 @@ def test_update_error_pass_with_create(
             {"reason": "", "state": "ok"},
             # expected results
             "dir1/nofile.json",
-            "INFO",
-            "did not attempt to delete dashboard",
+            "ERROR",
+            "unexpected error occurred during delete",
         ),
     ],
 )
@@ -777,7 +777,7 @@ def test_delete(
     expected_log_message,
 ):
     """Test Delete."""
-    monkeypatch.setattr("sidecar.sidecar._working_dir", fixture_dir)
+    monkeypatch.setattr("sidecar.sidecar._working_dir", fixtures_dir)
 
     # set to 0 if this metric is empty
     before = REGISTRY.get_sample_value(f"{metrics_prefix}_deleted_resources_total") or 0
@@ -817,7 +817,7 @@ def test_delete(
             {"dir": "dir1", "name": "test-2", "json": TEST_1_JSON},
             {"reason": "", "state": "ok"},
             # expected results
-            None,
+            "",
             "dir1/test-2.json",
             TEST_2_JSON,
             "WARNING",
@@ -839,7 +839,7 @@ def test_reconcile(
     expected_log_message,
 ):
     """Test reconcile."""
-    monkeypatch.setattr("sidecar.sidecar._working_dir", fixture_dir)
+    monkeypatch.setattr("sidecar.sidecar._working_dir", fixtures_dir)
 
     if expected_action == "create":
         before = REGISTRY.get_sample_value(f"{metrics_prefix}_created_resources_total")
@@ -884,7 +884,7 @@ def test_resource_count(caplog, index, expected_resource_count):
 
 
 @pytest.mark.parametrize(
-    "json, expected_title, expected_uid",
+    "json_str, expected_title, expected_uid",
     [
         (
             '{"title": "test", "uid": "test"}',
