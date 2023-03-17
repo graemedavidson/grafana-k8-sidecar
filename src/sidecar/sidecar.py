@@ -237,7 +237,7 @@ def update(
         update_counter.labels(update).inc()
     logger.info(f"fields updates {updates} for {uid}")
 
-    old_filename, new_filename, new_json = None, None, None
+    old_filename, new_filename, new_json = "", "", ""
     old_filename = "{}.json".format(Path(old["spec"]["dir"], old["spec"]["name"]))
     # maybe use spec as new = spec, but potentially new could = None
     new_filename = "{}.json".format(Path(new["spec"]["dir"], new["spec"]["name"]))
@@ -326,7 +326,8 @@ def delete(uid: str, spec: object, status: object, logger: logging, **kwargs):
         )
     except Exception as e:
         # As kubernetes resource is deleted do not add active error
-        logger.error(f"unexpected error occurred during delete: {e}")
+        # ToDo: Add exception to handle
+        logger.error(f"unexpected error occurred during delete: {e} ({uid})")
 
 
 @kopf.on.startup()

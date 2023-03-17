@@ -68,7 +68,7 @@ def update_file(
     if new_path != "" and old_path != new_path:
         path_change = True
 
-    if not path_change and new_json is None:
+    if not path_change and new_json == "":
         raise exceptions.nothingToDo
 
     full_old_path = Path(working_dir, old_path)
@@ -79,7 +79,7 @@ def update_file(
     if new_json != "" and not validate_json(new_json):
         raise exceptions.invalidJson
 
-    if new_json is not None:
+    if new_json != "":
         full_old_path.write_text(new_json)
 
     if path_change:
@@ -90,8 +90,13 @@ def update_file(
             full_old_path.unlink()
             try:
                 remove_empty_dir(full_old_path.parents[0])
-            except Exception as e:
-                raise e
+            except exceptions.pathNotDir:
+                pass
+            except exceptions.dirNotEmpty:
+                pass
+            except Exception:
+                # ToDo: Should log this as unexpected exception.
+                pass
             raise exceptions.duplicateName
 
         full_new_path.parents[0].mkdir(parents=False, exist_ok=True)
@@ -99,8 +104,13 @@ def update_file(
 
         try:
             remove_empty_dir(full_old_path.parents[0])
-        except Exception as e:
-            raise e
+        except exceptions.pathNotDir:
+            pass
+        except exceptions.dirNotEmpty:
+            pass
+        except Exception:
+            # ToDo: Should log this as unexpected exception.
+            pass
 
     return True
 
@@ -119,8 +129,13 @@ def delete_file(working_dir: str, path: str) -> bool:
 
     try:
         remove_empty_dir(full_path.parents[0])
-    except Exception as e:
-        raise e
+    except exceptions.pathNotDir:
+        pass
+    except exceptions.dirNotEmpty:
+        pass
+    except Exception:
+        # ToDo: Should log this as unexpected exception.
+        pass
 
     return True
 

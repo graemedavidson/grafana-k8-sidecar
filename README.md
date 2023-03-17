@@ -1,7 +1,12 @@
 # Grafana Kubernetes Sidecar
 
+**Archived:** due to no longer supporting within a deployment and never given any more time to tackle its
+many issues and bugs.
+
 Kubernetes sidecar installed alongside Grafana to deploy dashboards. Utilises shared volume between sidecar
 and Grafana containers. Grafana automatically detects new Dashboards placed into configured [data source](https://grafana.com/docs/grafana/latest/administration/provisioning/#data-sources).
+
+Replacement for sidecar included with the [Helm Prometheus Monitoring Stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack).
 
 - Kubernetes Custom Resource Definition for Grafana Dashboard.
 - Utilises the [Kopf](https://kopf.readthedocs.io/en/stable/) framework.
@@ -10,7 +15,7 @@ and Grafana containers. Grafana automatically detects new Dashboards placed into
 
 ## Documentation
 
-[Documentation]()
+[Documentation](./docs/)
 
 ## Releases
 
@@ -33,7 +38,7 @@ Install dependencies defined in [setup.py](./setup.py).
 pip install --editable .[dev]        # install dependencies including dev dependencies
 ```
 
-Create testable executable: `k8s-grafana-sidecar`
+Create testable executable: `grafana-k8-sidecar`
 
 
 ### Kubernetes Cluster
@@ -73,14 +78,14 @@ kubectl get grafanadashboards --all-namespaces
 ### Runtime
 
 ```sh
-source venv/bin/activate        # activate the venv
-k8s-grafana-sidecar             # this will use defaults (max-workers: 20, working-dir: /tmp/grafana-dashboards)
+source venv/bin/activate  # activate the venv
+grafana-k8-sidecar        # this will use defaults (max-workers: 20, working-dir: /tmp/grafana-dashboards)
 ```
 
 Settings:
 
 - `--working-dir=./sidecar/tests/fixtures/dashboards` to the dashboard fixtures.
-- ` --max-workers=1` max workers to 1 for easier chronological debugging.
+- `--max-workers=1` max workers to 1 for easier chronological debugging.
 
 Sidecar exposes [prometheus metrics](http://localhost:8000).
 

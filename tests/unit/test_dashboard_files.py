@@ -56,7 +56,7 @@ INVALID_JSON = "invalid json"
 @pytest.mark.parametrize(
     "path, new_json",
     [
-        ("test-1.json", None),
+        ("test-1.json", ""),
         ("test-1.json", TEST_1_JSON),
         ("dir1/test-2.json", TEST_2_JSON),
     ],
@@ -69,15 +69,15 @@ def test_check_file_pass(fixture_dir, path, new_json):
     p = Path(fixture_dir, path)
     assert p.is_file() is True
 
-    if new_json is not None:
+    if new_json != "":
         assert p.read_text() == new_json
 
 
 @pytest.mark.parametrize(
     "path, new_json, expected_exception",
     [
-        ("nofile.json", None, exceptions.noFileExists),
-        ("dir2/nofile.json", None, exceptions.noFileExists),
+        ("nofile.json", "", exceptions.noFileExists),
+        ("dir2/nofile.json", "", exceptions.noFileExists),
         ("test-1.json", TEST_2_JSON, exceptions.jsonMismatch),
         ("invalid-json.json", INVALID_JSON, exceptions.invalidJson),
     ],
@@ -128,16 +128,16 @@ def test_create_file_fail(fixture_dir, path, new_file_content, expected_exceptio
         (
             "test-1.json",
             "change-name.json",
-            None,
+            "",
         ),
         (
             "dir1/test-2.json",
             "change-dir/test-2.json",
-            None,
+            "",
         ),
         (
             "test-1.json",
-            None,
+            "",
             TEST_2_JSON,
         ),
     ],
@@ -147,23 +147,23 @@ def test_update_file_pass(fixture_dir, old_path, new_path, new_json):
 
     assert update is True
 
-    path = new_path if new_path is not None else old_path
+    path = new_path if new_path != "" else old_path
     path = Path(fixture_dir, path)
 
     assert path.is_file() is True
 
-    if new_json is not None:
+    if new_json != "":
         assert path.read_text() == new_json
 
 
 @pytest.mark.parametrize(
     "old_path, new_path, new_json, expected_exception",
     [
-        (None, None, None, exceptions.nothingToDo),
-        ("test-1.json", "test-1.json", None, exceptions.nothingToDo),
-        ("nofile.json", "not-exist.json", None, exceptions.oldPathDoesNotExist),
-        ("test-1.json", None, "invalid-json.json", exceptions.invalidJson),
-        ("test-1.json", "dir1/test-2.json", None, exceptions.duplicateName),
+        ("", "", "", exceptions.nothingToDo),
+        ("test-1.json", "test-1.json", "", exceptions.nothingToDo),
+        ("nofile.json", "not-exist.json", "", exceptions.oldPathDoesNotExist),
+        ("test-1.json", "", "invalid-json.json", exceptions.invalidJson),
+        ("test-1.json", "dir1/test-2.json", "", exceptions.duplicateName),
     ],
 )
 def test_update_file_fail(
